@@ -28,6 +28,4 @@ public interface Executor {
 
     void command(Arguments arguments);
 
-    void completer(Arguments arguments);
-
 }
