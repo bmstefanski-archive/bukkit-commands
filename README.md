@@ -23,7 +23,7 @@ You also can download this, as a dependency using the following setup.
 	<dependency>
 	    <groupId>com.github.whippytools</groupId>
 	    <artifactId>bukkit-commands</artifactId>
-	    <version>1.0-SNAPSHOT</version>
+	    <version>1.2</version>
 	</dependency>
 ```
 
