@@ -38,7 +38,6 @@ import pl.bmstefanski.commands.annotation.Permission;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -51,23 +50,16 @@ public class BukkitCommands {
 
         if (commandMap == null) {
             try {
-                Field modifiersField = Field.class.getDeclaredField("modifiers");
                 Field commandMapField = plugin.getServer().getPluginManager().getClass().getDeclaredField("commandMap");
 
-                modifiersField.setAccessible(true);
-
                 commandMapField.setAccessible(true);
-                modifiersField.setInt(commandMapField, commandMapField.getModifiers() & ~Modifier.FINAL);
                 this.commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer().getPluginManager());
                 commandMapField.setAccessible(false);
 
                 Field knownCommandsField = commandMap.getClass().getDeclaredField("knownCommands");
                 knownCommandsField.setAccessible(true);
-                modifiersField.setInt(knownCommandsField, knownCommandsField.getModifiers() & ~Modifier.FINAL);
                 this.knownCommands = (HashMap<String, org.bukkit.command.Command>) knownCommandsField.get(commandMap);
                 knownCommandsField.setAccessible(false);
-
-                modifiersField.setAccessible(false);
 
             } catch (IllegalAccessException | NoSuchFieldException ex) {
                 ex.printStackTrace();
