@@ -44,4 +44,5 @@ public @interface Command {
     int min() default 0;
 
     int max() default 0;
+
 }

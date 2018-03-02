@@ -43,3 +43,5 @@ target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputF
 target/commands-1.1-SNAPSHOT.jar
 target/commands-1.2.jar
 target/classes/pl/bmstefanski/commands/Executor.class
+.idea/.name
+.idea/vcs.xml

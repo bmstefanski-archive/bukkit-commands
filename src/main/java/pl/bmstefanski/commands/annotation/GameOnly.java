@@ -34,4 +34,5 @@ import java.lang.annotation.Target;
 public @interface GameOnly {
 
     boolean value() default true;
+
 }

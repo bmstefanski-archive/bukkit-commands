@@ -59,10 +59,9 @@ public interface Messageable {
     default String listToString(List<String> list) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.setLength(0);
-        String result = null;
 
         for (String string : list) {
-            stringBuilder.append(string + "\n");
+            stringBuilder.append(string).append("\n");
         }
 
         return fixColor(stringBuilder.toString());
