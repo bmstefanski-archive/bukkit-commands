@@ -27,8 +27,8 @@ package pl.bmstefanski.commands;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -38,20 +38,37 @@ import pl.bmstefanski.commands.annotation.Permission;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class BukkitCommands {
 
-    private CommandMap commandMap;
+    private SimpleCommandMap commandMap;
+    private HashMap<String, org.bukkit.command.Command> knownCommands;
 
     public BukkitCommands(Plugin plugin) {
 
         if (commandMap == null) {
             try {
-                Field field = plugin.getServer().getClass().getDeclaredField("commandMap");
-                field.setAccessible(true);
-                this.commandMap = (CommandMap) field.get(Bukkit.getServer());
-                field.setAccessible(false);
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                Field commandMapField = plugin.getServer().getPluginManager().getClass().getDeclaredField("commandMap");
+
+                modifiersField.setAccessible(true);
+
+                commandMapField.setAccessible(true);
+                modifiersField.setInt(commandMapField, commandMapField.getModifiers() & ~Modifier.FINAL);
+                this.commandMap = (SimpleCommandMap) commandMapField.get(Bukkit.getServer().getPluginManager());
+                commandMapField.setAccessible(false);
+
+                Field knownCommandsField = commandMap.getClass().getDeclaredField("knownCommands");
+                knownCommandsField.setAccessible(true);
+                modifiersField.setInt(knownCommandsField, knownCommandsField.getModifiers() & ~Modifier.FINAL);
+                this.knownCommands = (HashMap<String, org.bukkit.command.Command>) knownCommandsField.get(commandMap);
+                knownCommandsField.setAccessible(false);
+
+                modifiersField.setAccessible(false);
+
             } catch (IllegalAccessException | NoSuchFieldException ex) {
                 ex.printStackTrace();
             }
@@ -108,8 +125,23 @@ public class BukkitCommands {
                 this.commandMap.register("", command);
 
             }
-
         }
+    }
+
+    public void unregister(CommandExecutor commandExecutor) {
+        Validate.notNull(commandExecutor);
+
+        for (Method method : commandExecutor.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(Command.class)) {
+                Command commandAnnotation = method.getAnnotation(Command.class);
+
+                System.out.println("knownCommands: " + knownCommands);
+                System.out.println("commandAnnotation: " + commandAnnotation);
+
+                this.knownCommands.remove(commandAnnotation.name());
+            }
+        }
+
 
     }
 
