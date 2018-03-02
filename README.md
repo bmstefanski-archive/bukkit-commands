@@ -22,7 +22,7 @@ You also can download this, as a dependency using the following setup.
 	<dependency>
 	    <groupId>com.github.whippytools</groupId>
 	    <artifactId>bukkit-commands</artifactId>
-	    <version>1.2</version>
+	    <version>1.3</version>
 	</dependency>
 ```
 
@@ -32,7 +32,7 @@ public class Test extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        BukkitCommands bukkitCommands = new BukkitCommands();
+        BukkitCommands bukkitCommands = new BukkitCommands(this);
 
         bukkitCommands.register(new TestCommand());
     }
@@ -44,7 +44,7 @@ public class Test extends JavaPlugin {
 public class TestCommand implements CommandExecutor {
 
     @Command(name = "test", max = 1)
-    @Permission("chuj")
+    @Permission("some.permission")
     @GameOnly
     public void execute(CommandSender commandSender, CommandArguments commandArguments) {
 
