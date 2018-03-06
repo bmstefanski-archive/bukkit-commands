@@ -40,6 +40,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class BukkitCommands {
 
@@ -127,14 +128,29 @@ public class BukkitCommands {
             if (method.isAnnotationPresent(Command.class)) {
                 Command commandAnnotation = method.getAnnotation(Command.class);
 
-                System.out.println("knownCommands: " + knownCommands);
-                System.out.println("commandAnnotation: " + commandAnnotation);
-
                 this.knownCommands.remove(commandAnnotation.name());
             }
         }
+    }
 
+    public void unregisterBlockedCommands(CommandExecutor commandExecutor, List<String> blockedCommands) {
+        Validate.notNull(commandExecutor);
 
+        for (Method method : commandExecutor.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(Command.class)) {
+                Command commandAnnotation = method.getAnnotation(Command.class);
+
+                if (blockedCommands.contains(commandAnnotation.name())) {
+                    this.unregister(commandExecutor);
+                }
+
+            }
+        }
+
+    }
+
+    public HashMap<String, org.bukkit.command.Command> getKnownCommands() {
+        return new HashMap<>(knownCommands);
     }
 
 }
