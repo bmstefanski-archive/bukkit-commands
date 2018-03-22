@@ -1,4 +1,4 @@
-# bukkit-commands [![](https://jitpack.io/v/whippytools/bukkit-commands.svg)](https://jitpack.io/#whippytools/bukkit-commands)
+# bukkit-commands [![](https://jitpack.io/v/whippytools/bukkit-commands.svg)](https://jitpack.io/#whippytools/bukkit-commands) [![Build Status](https://travis-ci.org/whippytools/bukkit-commands.svg?branch=master)](https://travis-ci.org/whippytools/bukkit-commands)
 API, through which you can create custom commands.  
 
 # Using Bukkit-Commands
